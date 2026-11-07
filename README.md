@@ -1,13 +1,13 @@
-## Lab Activity 10 Answers
+## Lab Activity 11 Answers
 
-### G1. Which column did you turn into a table, and why?
+### G1. What two things are needed for route model binding?
 
-I turned the `element` column into an `elements` table because the same element names are repeated among different characters. An element is also a thing that could have its own details later, unlike rarity or the playable true-or-false value.
+The controller parameter must be type-hinted with the `Character` model, and the variable name must match the route segment name. For the `characters` resource, Laravel uses `{character}`, so the method must use `Character $character`. If either the type or name is wrong, Laravel will not inject the record correctly.
 
-### G2. What number did Screenshot 6 show, and why exactly that number?
+### G2. Why did the Delete link open the detail page?
 
-My Screenshot 6 showed 6 queries because I had five seeded characters. Eloquent first queried the characters table, then the view requested each character's element separately, making one original query plus five relationship queries. After adding `with('element')`, the count became 2.
+An HTML link sends a GET request only. The GET request for the same character address belongs to the show action, while deleting requires the DELETE verb. Therefore, the link opened the detail page instead of deleting anything.
 
-### G3. What would break if the belongsTo method were plural?
+### G3. What would break if the second argument of old() were missing or used alone?
 
-The method must be named `element()` because one character belongs to one element. Eloquent uses that singular name to look for the `element_id` foreign key. If I named it `elements()`, Eloquent would look for the wrong relationship and `$character->element->name` would no longer work correctly.
+Without the second argument, a fresh edit form would be empty because there would be no current character value to use as a fallback. If I used only the record value and left out old(), the form would lose the values I typed after a rejected submission. Using both lets Laravel show old input first and the saved record value otherwise.
