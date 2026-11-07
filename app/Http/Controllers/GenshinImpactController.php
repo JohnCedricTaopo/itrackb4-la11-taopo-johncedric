@@ -59,31 +59,44 @@ class GenshinImpactController extends Controller
             ->with('success', 'Character added successfully.');
     }
 
-    public function show($id)
+    public function show(Character $character)
     {
-        $character = Character::findOrFail($id);
-
         return view('characters.show', compact('character'));
     }
 
-    public function edit($id)
+    public function edit(Character $character)
     {
-        // Not implemented yet.
+        $elements = Element::all();
+
+        return view('characters.edit', compact('character', 'elements'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Character $character)
     {
-        // Not implemented yet.
+        $validated = $request->validate([
+            'name' => 'required|max:100',
+            'element_id' => 'required|exists:elements,id',
+            'weapon' => 'required|in:Sword,Claymore,Polearm,Catalyst,Bow',
+            'rarity' => 'required|numeric|in:4,5',
+            'is_playable' => 'required|boolean',
+            'remarks' => 'nullable',
+        ]);
+
+        $character->update($validated);
+
+        return redirect()->route('characters.index');
     }
 
-    public function destroy($id)
+    public function destroy(Character $character)
     {
-        // Not implemented yet.
+        $character->delete();
+
+        return redirect()->route('characters.index');
     }
 
     public function featured()
     {
-        $character = Character::findOrFail(4);
+        $character = Character::with('element')->findOrFail(4);
 
         return view('characters.featured', compact('character'));
     }

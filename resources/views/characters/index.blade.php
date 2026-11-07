@@ -14,7 +14,7 @@
                     <h2 class="mb-1">Character Archive</h2>
 
                     <p class="text-muted mb-0">
-                        Select a character name to open its detail page.
+                        Select a character name to open its individual page.
                     </p>
                 </div>
 
@@ -131,6 +131,7 @@
                             <th>Element</th>
                             <th>Weapon</th>
                             <th>Rarity</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
 
@@ -143,7 +144,7 @@
 
                                 <td>
                                     <a
-                                        href="{{ route('characters.show', $character->id) }}"
+                                        href="{{ route('characters.show', $character) }}"
                                     >
                                         {{ $character->name }}
                                     </a>
@@ -168,11 +169,37 @@
                                         </span>
                                     @endif
                                 </td>
+
+                                <td>
+                                    <a
+                                        class="btn btn-warning btn-sm"
+                                        href="{{ route('characters.edit', $character) }}"
+                                    >
+                                        Edit
+                                    </a>
+
+                                    <form
+                                        action="{{ route('characters.destroy', $character) }}"
+                                        method="POST"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Delete this character?')"
+                                    >
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button
+                                            type="submit"
+                                            class="btn btn-danger btn-sm"
+                                        >
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
                             </tr>
                         @empty
                             <tr>
                                 <td
-                                    colspan="6"
+                                    colspan="7"
                                     class="text-center text-muted py-4"
                                 >
                                     No characters match the selected filters.
